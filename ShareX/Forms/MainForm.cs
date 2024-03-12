@@ -1828,21 +1828,6 @@ namespace ShareX
             TaskHelpers.OpenCustomUploaderSettingsWindow();
         }
 
-        private void tsbApplicationSettings_Click(object sender, EventArgs e)
-        {
-            using (ApplicationSettingsForm settingsForm = new ApplicationSettingsForm())
-            {
-                settingsForm.ShowDialog();
-            }
-
-            if (!IsDisposed)
-            {
-                AfterApplicationSettingsJobs();
-                UpdateWorkflowsMenu();
-                SettingManager.SaveApplicationConfigAsync();
-            }
-        }
-
         private void tsbTaskSettings_Click(object sender, EventArgs e)
         {
             using (TaskSettingsForm taskSettingsForm = new TaskSettingsForm(Program.DefaultTaskSettings, true))
@@ -2359,6 +2344,29 @@ namespace ShareX
         private void tsmiCombineImagesHorizontally_Click(object sender, EventArgs e)
         {
             uim.CombineImages(Orientation.Horizontal);
+        }
+
+        private void tsMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            using (ApplicationSettingsForm settingsForm = new ApplicationSettingsForm(Program.HotkeyManager))
+            {
+                settingsForm.ShowDialog();
+            }
+            using (TaskSettingsForm taskSettingsForm = new TaskSettingsForm(Program.DefaultTaskSettings, true))
+            {
+                taskSettingsForm.ShowDialog();
+            }
+
+            if (!IsDisposed)
+            {
+                AfterTaskSettingsJobs();
+                SettingManager.SaveApplicationConfigAsync();
+            }
         }
 
         private void tsmiCombineImagesVertically_Click(object sender, EventArgs e)

@@ -119,6 +119,7 @@
             this.Name = "HotkeySettingsForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.HotkeySettingsForm_FormClosed);
+            this.Load += new System.EventHandler(this.HotkeySettingsForm_Load);
             this.ResumeLayout(false);
 
         }

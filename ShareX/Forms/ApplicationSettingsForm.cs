@@ -27,6 +27,7 @@ using ShareX.HelpersLib;
 using ShareX.Properties;
 using ShareX.UploadersLib;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,12 +40,239 @@ namespace ShareX
         private bool ready;
         private string lastPersonalPath;
 
-        public ApplicationSettingsForm()
+        public HotkeySelectionControl Selected { get; private set; }
+
+        private HotkeyManager manager;
+
+
+        public ApplicationSettingsForm(HotkeyManager hotkeyManager)
         {
             InitializeControls();
             ShareXResources.ApplyTheme(this, true);
+            btnHotkeysDisabled.Visible = Program.Settings.DisableHotkeys;
+
+            PrepareHotkeys(hotkeyManager);
+        }
+        // ICI
+        public void PrepareHotkeys(HotkeyManager hotkeyManager)
+        {
+            if (manager == null)
+            {
+                manager = hotkeyManager;
+                manager.HotkeysToggledTrigger += HandleHotkeysToggle;
+                manager.RegisterFailedHotkeys();
+
+                AddControls();
+            }
         }
 
+        private void AddControls()
+        {
+            flpHotkeys.Controls.Clear();
+
+            foreach (HotkeySettings hotkeySettings in manager.Hotkeys)
+            {
+                AddHotkeySelectionControl(hotkeySettings);
+            }
+        }
+
+        private void UpdateButtons()
+        {
+            btnEdit.Enabled = btnRemove.Enabled = btnDuplicate.Enabled = Selected != null;
+            btnMoveUp.Enabled = btnMoveDown.Enabled = Selected != null && flpHotkeys.Controls.Count > 1;
+        }
+
+        private HotkeySelectionControl FindSelectionControl(HotkeySettings hotkeySetting)
+        {
+            return flpHotkeys.Controls.Cast<HotkeySelectionControl>().FirstOrDefault(hsc => hsc.HotkeySettings == hotkeySetting);
+        }
+
+        private void control_SelectedChanged(object sender, EventArgs e)
+        {
+            Selected = (HotkeySelectionControl)sender;
+            UpdateButtons();
+            UpdateCheckStates();
+        }
+
+        private void UpdateCheckStates()
+        {
+            foreach (Control control in flpHotkeys.Controls)
+            {
+                ((HotkeySelectionControl)control).Selected = Selected == control;
+            }
+        }
+
+        private void UpdateHotkeyStatus()
+        {
+            foreach (Control control in flpHotkeys.Controls)
+            {
+                ((HotkeySelectionControl)control).UpdateHotkeyStatus();
+            }
+        }
+
+        private void control_HotkeyChanged(object sender, EventArgs e)
+        {
+            HotkeySelectionControl control = (HotkeySelectionControl)sender;
+            manager.RegisterHotkey(control.HotkeySettings);
+            manager.RegisterFailedHotkeys();
+            UpdateHotkeyStatus();
+        }
+
+        private HotkeySelectionControl AddHotkeySelectionControl(HotkeySettings hotkeySettings)
+        {
+            HotkeySelectionControl control = new HotkeySelectionControl(hotkeySettings);
+            control.Margin = new Padding(0, 0, 0, 4);
+            control.SelectedChanged += control_SelectedChanged;
+            control.HotkeyChanged += control_HotkeyChanged;
+            control.EditRequested += control_EditRequested;
+            flpHotkeys.Controls.Add(control);
+            return control;
+        }
+
+        private void Edit(HotkeySelectionControl selectionControl)
+        {
+            TaskSettings taskSettings = selectionControl.HotkeySettings.TaskSettings;
+            taskSettings.SetDefaultSettings();
+
+            using (TaskSettingsForm taskSettingsForm = new TaskSettingsForm(taskSettings))
+            {
+                taskSettingsForm.ShowDialog();
+                selectionControl.UpdateControls();
+            }
+        }
+
+        private void control_EditRequested(object sender, EventArgs e)
+        {
+            Edit((HotkeySelectionControl)sender);
+        }
+
+        private void EditSelected()
+        {
+            if (Selected != null)
+            {
+                Edit(Selected);
+            }
+        }
+
+        private void HandleHotkeysToggle(bool hotkeysEnabled)
+        {
+            UpdateHotkeyStatus();
+        }
+
+        private void flpHotkeys_Layout(object sender, LayoutEventArgs e)
+        {
+            foreach (Control control in flpHotkeys.Controls)
+            {
+                control.ClientSize = new Size(flpHotkeys.ClientSize.Width, control.ClientSize.Height);
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            HotkeySettings hotkeySettings = new HotkeySettings();
+            hotkeySettings.TaskSettings = TaskSettings.GetDefaultTaskSettings();
+            manager.Hotkeys.Add(hotkeySettings);
+            HotkeySelectionControl control = AddHotkeySelectionControl(hotkeySettings);
+            control.Selected = true;
+            Selected = control;
+            UpdateButtons();
+            UpdateCheckStates();
+            control.Focus();
+            Update();
+            control.OpenTaskMenu();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (Selected != null)
+            {
+                manager.UnregisterHotkey(Selected.HotkeySettings);
+                HotkeySelectionControl hsc = FindSelectionControl(Selected.HotkeySettings);
+                if (hsc != null) flpHotkeys.Controls.Remove(hsc);
+                Selected = null;
+                UpdateButtons();
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            EditSelected();
+        }
+
+        private void btnDuplicate_Click(object sender, EventArgs e)
+        {
+            if (Selected != null)
+            {
+                HotkeySettings hotkeySettings = new HotkeySettings();
+                hotkeySettings.TaskSettings = Selected.HotkeySettings.TaskSettings.Copy();
+                hotkeySettings.TaskSettings.WatchFolderEnabled = false;
+                hotkeySettings.TaskSettings.WatchFolderList = new List<WatchFolderSettings>();
+                manager.Hotkeys.Add(hotkeySettings);
+                HotkeySelectionControl control = AddHotkeySelectionControl(hotkeySettings);
+                control.Selected = true;
+                Selected = control;
+                UpdateCheckStates();
+                control.Focus();
+            }
+        }
+
+        private void btnMoveUp_Click(object sender, EventArgs e)
+        {
+            if (Selected != null && flpHotkeys.Controls.Count > 1)
+            {
+                int index = flpHotkeys.Controls.GetChildIndex(Selected);
+
+                int newIndex;
+
+                if (index == 0)
+                {
+                    newIndex = flpHotkeys.Controls.Count - 1;
+                }
+                else
+                {
+                    newIndex = index - 1;
+                }
+
+                flpHotkeys.Controls.SetChildIndex(Selected, newIndex);
+                manager.Hotkeys.Move(index, newIndex);
+            }
+        }
+
+        private void btnMoveDown_Click(object sender, EventArgs e)
+        {
+            if (Selected != null && flpHotkeys.Controls.Count > 1)
+            {
+                int index = flpHotkeys.Controls.GetChildIndex(Selected);
+
+                int newIndex;
+
+                if (index == flpHotkeys.Controls.Count - 1)
+                {
+                    newIndex = 0;
+                }
+                else
+                {
+                    newIndex = index + 1;
+                }
+
+                flpHotkeys.Controls.SetChildIndex(Selected, newIndex);
+                manager.Hotkeys.Move(index, newIndex);
+            }
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(Resources.HotkeySettingsForm_Reset_all_hotkeys_to_defaults_Confirmation, "ShareX", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                manager.ResetHotkeys();
+                AddControls();
+                Selected = null;
+                UpdateButtons();
+            }
+        }
+
+
+        // JUSQUA ICI
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             this.ForceActivate();
@@ -1126,6 +1354,8 @@ namespace ShareX
             Program.Settings.ProxySettings.Port = (int)nudProxyPort.Value;
         }
 
+
         #endregion Proxy
+
     }
 }

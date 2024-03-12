@@ -280,5 +280,10 @@ namespace ShareX
             TaskHelpers.ToggleHotkeys(false);
             btnHotkeysDisabled.Visible = false;
         }
+
+        private void HotkeySettingsForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

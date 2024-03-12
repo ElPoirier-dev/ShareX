@@ -181,7 +181,17 @@ namespace ShareX
             this.txtProxyUsername = new System.Windows.Forms.TextBox();
             this.tpAdvanced = new System.Windows.Forms.TabPage();
             this.pgSettings = new System.Windows.Forms.PropertyGrid();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.flpHotkeys = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.btnMoveDown = new System.Windows.Forms.Button();
+            this.btnMoveUp = new System.Windows.Forms.Button();
+            this.btnDuplicate = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.tttvMain = new ShareX.HelpersLib.TabToTreeView();
+            this.btnHotkeysDisabled = new System.Windows.Forms.Button();
             this.tcSettings.SuspendLayout();
             this.tpGeneral.SuspendLayout();
             this.tpTheme.SuspendLayout();
@@ -214,6 +224,7 @@ namespace ShareX
             this.tpProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudProxyPort)).BeginInit();
             this.tpAdvanced.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcSettings
@@ -231,6 +242,7 @@ namespace ShareX
             this.tcSettings.Controls.Add(this.tpPrint);
             this.tcSettings.Controls.Add(this.tpProxy);
             this.tcSettings.Controls.Add(this.tpAdvanced);
+            this.tcSettings.Controls.Add(this.tabPage1);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
             // 
@@ -1411,6 +1423,75 @@ namespace ShareX
             this.pgSettings.PropertySort = System.Windows.Forms.PropertySort.Categorized;
             this.pgSettings.ToolbarVisible = false;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.btnHotkeysDisabled);
+            this.tabPage1.Controls.Add(this.flpHotkeys);
+            this.tabPage1.Controls.Add(this.btnReset);
+            this.tabPage1.Controls.Add(this.btnMoveDown);
+            this.tabPage1.Controls.Add(this.btnMoveUp);
+            this.tabPage1.Controls.Add(this.btnDuplicate);
+            this.tabPage1.Controls.Add(this.btnEdit);
+            this.tabPage1.Controls.Add(this.btnRemove);
+            this.tabPage1.Controls.Add(this.btnAdd);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // flpHotkeys
+            // 
+            resources.ApplyResources(this.flpHotkeys, "flpHotkeys");
+            this.flpHotkeys.Name = "flpHotkeys";
+            // 
+            // btnReset
+            // 
+            resources.ApplyResources(this.btnReset, "btnReset");
+            this.btnReset.Name = "btnReset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // btnMoveDown
+            // 
+            resources.ApplyResources(this.btnMoveDown, "btnMoveDown");
+            this.btnMoveDown.Name = "btnMoveDown";
+            this.btnMoveDown.UseVisualStyleBackColor = true;
+            this.btnMoveDown.Click += new System.EventHandler(this.btnMoveDown_Click);
+            // 
+            // btnMoveUp
+            // 
+            resources.ApplyResources(this.btnMoveUp, "btnMoveUp");
+            this.btnMoveUp.Name = "btnMoveUp";
+            this.btnMoveUp.UseVisualStyleBackColor = true;
+            this.btnMoveUp.Click += new System.EventHandler(this.btnMoveUp_Click);
+            // 
+            // btnDuplicate
+            // 
+            resources.ApplyResources(this.btnDuplicate, "btnDuplicate");
+            this.btnDuplicate.Name = "btnDuplicate";
+            this.btnDuplicate.UseVisualStyleBackColor = true;
+            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
+            // 
+            // btnEdit
+            // 
+            resources.ApplyResources(this.btnEdit, "btnEdit");
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
+            // btnRemove
+            // 
+            resources.ApplyResources(this.btnRemove, "btnRemove");
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // btnAdd
+            // 
+            resources.ApplyResources(this.btnAdd, "btnAdd");
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // tttvMain
             // 
             resources.ApplyResources(this.tttvMain, "tttvMain");
@@ -1422,6 +1503,12 @@ namespace ShareX
             this.tttvMain.TreeViewFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.tttvMain.TreeViewSize = 175;
             this.tttvMain.TabChanged += new ShareX.HelpersLib.TabToTreeView.TabChangedEventHandler(this.tttvMain_TabChanged);
+            // 
+            // btnHotkeysDisabled
+            // 
+            resources.ApplyResources(this.btnHotkeysDisabled, "btnHotkeysDisabled");
+            this.btnHotkeysDisabled.Name = "btnHotkeysDisabled";
+            this.btnHotkeysDisabled.UseVisualStyleBackColor = true;
             // 
             // ApplicationSettingsForm
             // 
@@ -1483,6 +1570,7 @@ namespace ShareX
             this.tpProxy.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudProxyPort)).EndInit();
             this.tpAdvanced.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1642,5 +1730,15 @@ namespace ShareX
         private System.Windows.Forms.TextBox txtSaveImageSubFolderPatternWindow;
         private System.Windows.Forms.Label lblSaveImageSubFolderPatternWindow;
         private System.Windows.Forms.CheckBox cbAutoCheckUpdate;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnDuplicate;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnMoveDown;
+        private System.Windows.Forms.Button btnMoveUp;
+        private System.Windows.Forms.FlowLayoutPanel flpHotkeys;
+        private System.Windows.Forms.Button btnHotkeysDisabled;
     }
 }
