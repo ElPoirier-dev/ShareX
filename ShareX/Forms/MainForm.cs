@@ -380,7 +380,6 @@ namespace ShareX
             }
 
             ToolStripMenuItem tsmi = new ToolStripMenuItem(Resources.MainForm_UpdateWorkflowsMenu_You_can_add_workflows_from_hotkey_settings___);
-            tsmi.Click += tsbHotkeySettings_Click;
             tsddbWorkflows.DropDownItems.Add(tsmi);
 
             tsmiTrayWorkflows.Visible = tsmiTrayWorkflows.DropDownItems.Count > 0;
@@ -1343,14 +1342,6 @@ namespace ShareX
             }
         }
 
-        private void dgvHotkeys_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                tsbHotkeySettings_Click(sender, e);
-            }
-        }
-
         private async void lvUploads_SelectedIndexChanged(object sender, EventArgs e)
         {
             lvUploads.SelectedIndexChanged -= lvUploads_SelectedIndexChanged;
@@ -1841,24 +1832,6 @@ namespace ShareX
                 SettingManager.SaveApplicationConfigAsync();
             }
         }
-
-        private void tsbHotkeySettings_Click(object sender, EventArgs e)
-        {
-            if (Program.HotkeyManager != null)
-            {
-                using (HotkeySettingsForm hotkeySettingsForm = new HotkeySettingsForm(Program.HotkeyManager))
-                {
-                    hotkeySettingsForm.ShowDialog();
-                }
-
-                if (!IsDisposed)
-                {
-                    UpdateWorkflowsMenu();
-                    SettingManager.SaveHotkeysConfigAsync();
-                }
-            }
-        }
-
         private void tsbScreenshotsFolder_Click(object sender, EventArgs e)
         {
             TaskHelpers.OpenScreenshotsFolder();

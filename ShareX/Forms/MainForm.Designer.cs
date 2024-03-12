@@ -967,13 +967,6 @@
             this.tsbTaskSettings.Name = "tsbTaskSettings";
             this.tsbTaskSettings.Click += new System.EventHandler(this.tsbTaskSettings_Click);
             // 
-            // tsbHotkeySettings
-            // 
-            this.tsbHotkeySettings.Image = global::ShareX.Properties.Resources.keyboard;
-            resources.ApplyResources(this.tsbHotkeySettings, "tsbHotkeySettings");
-            this.tsbHotkeySettings.Name = "tsbHotkeySettings";
-            this.tsbHotkeySettings.Click += new System.EventHandler(this.tsbHotkeySettings_Click);
-            // 
             // tssMain2
             // 
             this.tssMain2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 6);
@@ -2122,13 +2115,6 @@
             resources.ApplyResources(this.tsmiTrayTaskSettings, "tsmiTrayTaskSettings");
             this.tsmiTrayTaskSettings.Click += new System.EventHandler(this.tsbTaskSettings_Click);
             // 
-            // tsmiTrayHotkeySettings
-            // 
-            this.tsmiTrayHotkeySettings.Image = global::ShareX.Properties.Resources.keyboard;
-            this.tsmiTrayHotkeySettings.Name = "tsmiTrayHotkeySettings";
-            resources.ApplyResources(this.tsmiTrayHotkeySettings, "tsmiTrayHotkeySettings");
-            this.tsmiTrayHotkeySettings.Click += new System.EventHandler(this.tsbHotkeySettings_Click);
-            // 
             // tsmiTrayToggleHotkeys
             // 
             this.tsmiTrayToggleHotkeys.Image = global::ShareX.Properties.Resources.keyboard__minus;
@@ -2258,7 +2244,6 @@
             this.dgvHotkeys.ReadOnly = true;
             this.dgvHotkeys.RowHeadersVisible = false;
             this.dgvHotkeys.TabStop = false;
-            this.dgvHotkeys.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dgvHotkeys_MouseDoubleClick);
             this.dgvHotkeys.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgvHotkeys_MouseUp);
             // 
             // cHotkeyStatus
