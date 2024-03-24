@@ -2319,20 +2319,11 @@ namespace ShareX
             uim.CombineImages(Orientation.Horizontal);
         }
 
-        private void tsMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             using (ApplicationSettingsForm settingsForm = new ApplicationSettingsForm(Program.HotkeyManager))
             {
                 settingsForm.ShowDialog();
-            }
-            using (TaskSettingsForm taskSettingsForm = new TaskSettingsForm(Program.DefaultTaskSettings, true))
-            {
-                taskSettingsForm.ShowDialog();
             }
 
             if (!IsDisposed)

@@ -44,6 +44,9 @@ namespace ShareX
 
         private HotkeyManager manager;
 
+        public TaskSettings TaskSettings { get; private set; }
+        public bool IsDefault { get; private set; }
+
 
         public ApplicationSettingsForm(HotkeyManager hotkeyManager)
         {
@@ -53,6 +56,10 @@ namespace ShareX
 
             PrepareHotkeys(hotkeyManager);
         }
+        // TODO ADD TASK SETTINGS FORM
+
+
+
         // ICI
         public void PrepareHotkeys(HotkeyManager hotkeyManager)
         {
